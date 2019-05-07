@@ -50,10 +50,12 @@ class FrequencyCounter:
         os.read(self.fc,64).decode('UTF-8').split("\x00")[0][1:]
         return None
         
-    def get_sample_time(self):
+        def get_sample_time(self):
         """ Returns the sample time of the device """
         os.write(self.fc,b'!\r')
         time.sleep(1)
-        return os.read(self.fc,64).decode('UTF-8').split()[0][1:]
+        rval = os.read(self.fc,64).decode('UTF-8').split("\x00")[0]
+        val = rval.encode(encoding='UTF-8') #Encode the value again to "fix" the return value as to add a binary "b" to it.
+        return val[1]
     
 frequency_counter = FrequencyCounter()
